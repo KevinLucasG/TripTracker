@@ -1,0 +1,39 @@
+﻿# Visual Studio directories and files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build directories
+bin/
+obj/
+out/
+
+# Package files
+packages/
+*.nupkg
+*.snupkg
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Publish configuration
+.publish/
+*.pubxml
+*.publishproj
+
+# NuGet generated files
+*.nupkg
+*.snupkg
+.nuget/
+
+# Local configuration
+*.config
+appsettings.*.json
+
+# Logs
+*.log
+
+# Cache files
+*.vsconfig
