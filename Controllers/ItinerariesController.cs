@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TripTrackerAPI.Context;
 using TripTrackerAPI.Dtos;
+using TripTrackerAPI.Models;
 using TripTrackerAPI.Repository.Interface;
 
 namespace TripTrackerAPI.Controllers
@@ -13,7 +14,7 @@ namespace TripTrackerAPI.Controllers
         private readonly IMapper _mapper;
         private readonly IItineraries _repository;
 
-    
+
         public ItinerariesController(IItineraries repository, IMapper mapper)
         {
             _repository = repository;
@@ -41,13 +42,51 @@ namespace TripTrackerAPI.Controllers
 
             return itinerarieReturn != null
                 ? Ok(itinerarieReturn)
-                :NotFound("Não encontrado");
+                : NotFound("Não encontrado");
+        }
+        [HttpPost]
+        public async Task<IActionResult> Post(ItinerariAddDto itinerarie)
+        {
+            if (string.IsNullOrEmpty(itinerarie.Name)) return BadRequest("Dados inválidos");
+
+            var itinerarieAdd = _mapper.Map<ItinerariAddDto>(itinerarie);
+            _repository.Add(itinerarieAdd);
+
+            return await _repository.SaveChangesAsync()
+            ? Ok("Aadicionado")
+            : BadRequest("Erro ao adicionar");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Post()
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id)
         {
-            return await Post();
+            if (id <= 0) return BadRequest("Inválido");
+
+            var itinerarie = _repository.GetItinerariesById(id);
+
+            if (itinerarie == null) return NotFound("Especialidade não existe na base de dados");
+            
+            
+            
+            _repository.Update(itinerarie);
+
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Atualizado")
+                : BadRequest("Erro ao atualizar");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task <IActionResult> Delete(int id)
+        {
+            if (id <= 0) return BadRequest("Inválido");
+            var itinerarie = _repository.GetItinerariesById(id);
+
+            _repository.Delete(itinerarie);
+
+            return await _repository.SaveChangesAsync()
+                ? Ok("Deletado")
+                : BadRequest("Erro ao Deletar");
         }
     }
 }
