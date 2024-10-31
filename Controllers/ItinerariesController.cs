@@ -45,16 +45,18 @@ namespace TripTrackerAPI.Controllers
                 : NotFound("Não encontrado");
         }
         [HttpPost]
-        public async Task<IActionResult> Post(ItinerariAddDto itinerarie)
+        public async Task<IActionResult> Post(ItinerarieAddDto itinerarie)
         {
-            if (string.IsNullOrEmpty(itinerarie.Name)) return BadRequest("Dados inválidos");
+      
+        if (string.IsNullOrEmpty(itinerarie.title)) return BadRequest("Dados inválidos");
 
-            var itinerarieAdd = _mapper.Map<ItinerariAddDto>(itinerarie);
-            _repository.Add(itinerarieAdd);
+        var itinerarieAdd = _mapper.Map<Itineraries>(itinerarie);
+         _repository.Add(itinerarieAdd);
 
-            return await _repository.SaveChangesAsync()
-            ? Ok("Aadicionado")
-            : BadRequest("Erro ao adicionar");
+
+        return await _repository.SaveChangesAsync()
+        ? Ok("Aadicionado")
+        : BadRequest("Erro ao adicionar");
         }
 
         [HttpPut("{id}")]
